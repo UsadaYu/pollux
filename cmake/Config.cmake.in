@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+set(_pollux_target_file "@_target_package_dir@/@POLLUX_TARGET_NAME@Targets.cmake")
+
+include(${_pollux_target_file})
+
+message(STATUS "Found @POLLUX_TARGET_NAME@: @CMAKE_INSTALL_PREFIX@ (version-@POLLUX_VERSION@)")

@@ -1,0 +1,42 @@
+file(GLOB _test_generated_to_delete "@GLOB_TEST_GENERATED_TO_DELETE@")
+file(GLOB _test_log_to_delete "@GLOB_TEST_LOG_TO_DELETE@")
+
+foreach(file ${_test_generated_to_delete})
+  if(EXISTS "${file}")
+    if(IS_DIRECTORY "${file}")
+      message(STATUS "Deleting directory: ${file}")
+      execute_process(
+        COMMAND ${CMAKE_COMMAND} -E rm -rf "${file}"
+        RESULT_VARIABLE result
+      )
+    else()
+      message(STATUS "Deleting file: ${file}")
+      execute_process(
+        COMMAND ${CMAKE_COMMAND} -E remove "${file}"
+        RESULT_VARIABLE result
+      )
+    endif()
+    if(NOT result EQUAL 0)
+      message(FATAL_ERROR "Failed to delete file or directory: ${file}")
+    endif()
+    unset(result)
+  endif()
+endforeach()
+unset(file)
+
+foreach(file ${_test_log_to_delete})
+  if(EXISTS "${file}" AND NOT IS_DIRECTORY "${file}")
+    message(STATUS "Deleting file: ${file}")
+    execute_process(
+      COMMAND ${CMAKE_COMMAND} -E remove "${file}"
+      RESULT_VARIABLE result
+    )
+    if(NOT result EQUAL 0)
+      message(FATAL_ERROR "Failed to delete file: ${file}")
+    endif()
+    unset(result)
+  else()
+    message(STATUS "Skipping directory or non-existent file: ${file}")
+  endif()
+endforeach()
+unset(file)

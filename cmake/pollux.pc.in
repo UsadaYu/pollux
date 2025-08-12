@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: @POLLUX_TARGET_NAME@
+Description: pollux
+Version: @POLLUX_VERSION@
+URL: https://github.com/UsadaYu/open-tool/tree/master/video/ffmpeg
+Libs: -L${libdir} @_pkg_interface_link_dir@ @_pkg_interface_link_libraries@
+Libs.private: @_pkg_interface_private_link_dir@ @_pkg_interface_private_link_libraries@
+Cflags: -I${includedir}
