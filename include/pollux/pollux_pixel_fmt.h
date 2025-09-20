@@ -2,8 +2,8 @@
 #define POLLUX_PIXEL_FMT_H
 
 /**
- * @brief Pixel format, this enumeration inherits from the
- *  `enum AVPixelFormat` of ffmpeg.
+ * @brief Pixel format, this enumeration inherits from the `enum AVPixelFormat`
+ * of ffmpeg.
  */
 typedef enum {
   pollux_pix_fmt_none = -1,
@@ -15,6 +15,8 @@ typedef enum {
   pollux_pix_fmt_yuv444p = 5,     // planar number: 3,  YUV 4:4:4, 24bpp, Y-U-V...
   pollux_pix_fmt_pal8 = 11,       // pal8,              8-bit color palette, refer to `AV_PIX_FMT_RGB32` of `ffmpeg`.
   pollux_pix_fmt_yuvj420p = 12,   // planar number: 3,  YUV 4:2:0, 12bpp, full scale (JPEG). According to `ffmpeg`, deprecated in favor of `AV_PIX_FMT_YUV420P` and setting color_range.
+  pollux_pix_fmt_yuvj422p = 13,   // planar number: 3,  YUV 4:2:2, 16bpp, full scale (JPEG). According to `ffmpeg`, deprecated in favor of `AV_PIX_FMT_YUV422P` and setting color_range
+  pollux_pix_fmt_yuvj444p = 14,   // planar number: 3,  YUV 4:4:4, 24bpp, full scale (JPEG). According to `ffmpeg`, deprecated in favor of `AV_PIX_FMT_YUV444P` and setting color_range.
   pollux_pix_fmt_bgr8 = 17,       // packed,            RGB 3:3:2, 8bpp, (msb)2B 3G 3R(lsb)
   pollux_pix_fmt_bgr4 = 18,       // packed,            RGB 1:2:1 bitstream, 4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits.
   pollux_pix_fmt_bgr4_byte = 19,  // packed,            RGB 1:2:1, 8bpp, (msb)1B 2G 1R(lsb)
@@ -27,4 +29,4 @@ typedef enum {
   pollux_pix_fmt_max,
 } pollux_pix_fmt_t;
 
-#endif  // POLLUX_PIXEL_FMT_H
+#endif // POLLUX_PIXEL_FMT_H

@@ -1,27 +1,27 @@
-#include "pollux_frame.h"
+#include "pollux/pollux_frame.h"
 
 #include <libavutil/imgutils.h>
 
-#include "cvt/cvt_pixel.h"
-#include "internal/internal_ff_erron.h"
-#include "internal/internal_frame.h"
-#include "pollux_erron.h"
+#include "pollux/internal/ffmpeg_cvt/pixel.h"
+#include "pollux/internal/frame.h"
+#include "pollux/internal/util.h"
+#include "pollux/pollux_erron.h"
 
-void pollux_frame_free(pollux_frame_t **res) {
+pollux_api void pollux_frame_free(pollux_frame_t **res) {
   pollux_frame_t **r = res;
 
-  if (r && (*r)) {
-    auto rf = (internal_frame_t **)(&((*r)->priv_data));
+  if (r && *r) {
+    frame_t **rf = (frame_t **)(&((*r)->priv_data));
 
-    if (rf && (*rf)) {
+    if (rf && *rf) {
       AVFrame **f = &((*rf)->av_frame);
 
-      if (f && (*f)) {
+      if (f && *f) {
         if ((*rf)->has_img_mem) {
           (*rf)->has_img_mem = false;
 
           uint8_t **d = (*f)->data + 0;
-          if (d && (*d)) {
+          if (d && *d) {
             av_freep(d);
             *d = nullptr;
           }
@@ -40,26 +40,23 @@ void pollux_frame_free(pollux_frame_t **res) {
 }
 
 /**
- * @brief to request memory for `pollux_frame_t`, actually,
- *  request a frame cache through ffmpeg's api and record
- *  it using the `priv_data` pointer
+ * @brief to request memory for `pollux_frame_t`, actually, request a frame
+ * cache through ffmpeg's api and record it using the `priv_data` pointer
  */
-int pollux_frame_alloc(const pollux_img_t *img,
-                       pollux_frame_t **res) {
-  if (!res) {
+pollux_api int pollux_frame_alloc(const pollux_img_t *img,
+                                  pollux_frame_t **res) {
+  if (!res)
     return pollux_err_entry;
-  }
 
   pollux_frame_t *r = calloc(1, sizeof(pollux_frame_t));
   if (!r) {
-    sirius_error("calloc\n");
+    sirius_error("calloc -> 'pollux_frame_t'\n");
     return pollux_err_memory_alloc;
   }
 
-  internal_frame_t *rf =
-      calloc(1, sizeof(internal_frame_t));
+  frame_t *rf = calloc(1, sizeof(frame_t));
   if (!rf) {
-    sirius_error("calloc\n");
+    sirius_error("calloc -> 'frame_t'\n");
     goto label_free;
   }
   r->priv_data = (void *)rf;
@@ -76,11 +73,10 @@ int pollux_frame_alloc(const pollux_img_t *img,
     if (!cvt_pix_plx_to_ff(img->fmt, &av_fmt))
       goto label_free;
 
-    int ret =
-        av_image_alloc(f->data, f->linesize, img->width,
-                       img->height, av_fmt, img->align);
+    int ret = av_image_alloc(f->data, f->linesize, img->width, img->height,
+                             av_fmt, img->align);
     if (ret < 0) {
-      internal_ff_error(ret, av_image_alloc);
+      ffmpeg_error(ret, "av_image_alloc");
       goto label_free;
     }
 
@@ -96,9 +92,10 @@ int pollux_frame_alloc(const pollux_img_t *img,
     rf->has_img_mem = true;
   } else {
     sirius_debg(
-        "The parameter `img` is empty, so no memory "
-        "related to the image is applied for\n");
-    sirius_debg("Frame address: %p\n", r);
+      "\nThe parameter `img` is empty\n"
+      "No memory related to the image is applied for\n"
+      "Frame address: %p\n",
+      r);
   }
 
   *res = r;

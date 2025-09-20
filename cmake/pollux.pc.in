@@ -6,7 +6,7 @@ includedir=${prefix}/include
 Name: @POLLUX_TARGET_NAME@
 Description: pollux
 Version: @POLLUX_VERSION@
-URL: https://github.com/UsadaYu/open-tool/tree/master/video/ffmpeg
+URL: https://github.com/UsadaYu/pollux
 Libs: -L${libdir} @_pkg_interface_link_dir@ @_pkg_interface_link_libraries@
 Libs.private: @_pkg_interface_private_link_dir@ @_pkg_interface_private_link_libraries@
-Cflags: -I${includedir}
+Cflags: -I${includedir} @_pkg_interface_cflags@

@@ -2,14 +2,17 @@
 #define POLLUX_RATIONAL_H
 
 /**
- * @brief Rational number (pair of numerator and
- *  denominator).
+ * @brief Rational number (pair of numerator and denominator).
  */
 typedef struct {
-  /* Numerator. */
+  /**
+   * @brief Numerator.
+   */
   int num;
-  /* Denominator */
+  /**
+   * @brief Denominator.
+   */
   int den;
 } pollux_rational;
 
-#endif  // POLLUX_RATIONAL_H
+#endif // POLLUX_RATIONAL_H
